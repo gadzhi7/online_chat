@@ -15,19 +15,30 @@
       <div class="chat-users collection">
         <a href="" class="collection-item"></a>
       </div>
-    </div>
-    <div class="chat-messages">
-      <div class="message">
-        <div class="message-content z-depth-1">
-
-        </div>
+      <div class="chat-messages">
+        <chat-message
+          v-for="(m, index) in messages"
+          :message="m"
+          :key="index"
+        ></chat-message>
       </div>
     </div>
     <div class="actions">
       <div class="input-field">
-        <input type="text">
+        <input
+          type="text"
+          placeholder="Type your message..."
+          v-model.trim="message"
+          autofocus autocomplete="false"
+          @keydown.enter="sendMessage"
+          >
       </div>
-      <button type="button" class="btn">Send message</button>
+      <button
+        type="button"
+        class="btn"
+        @click="sendMessage"
+        :disabled="message.length === 0"
+        >Send message</button>
     </div>
   </div>
 

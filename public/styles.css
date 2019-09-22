@@ -28,6 +28,7 @@ html, body {
   width: 300px;
   border: 1px solid #e0e0e0;
   margin: 0;
+  overflow-y: auto;
 }
 
 .actions {
@@ -38,7 +39,7 @@ html, body {
 
 .chat-messages {
   border: 1px solid #e0e0e0;
-  width: 100%;
+  width: calc(100% - 300px);
   padding: 15px;
   overflow-y: auto;
 }
