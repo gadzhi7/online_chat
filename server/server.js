@@ -2,6 +2,7 @@ const express = require('express');
 const socketIO = require('socket.io');
 const path = require('path');
 const http = require('http');
+const users = require('./users')();
 
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000;
@@ -20,8 +21,8 @@ io.on('connection', socket => {
     if(!user.name || !user.room) {
       return callback('Enter valid user data');
     } else {
-      callback({userId: socket.id})
-      socket.emit('message:new', message('Admin', `Welcome ${user.name}!`))
+      callback({userId: socket.id});
+      socket.emit('message:new', message('Admin', `Welcome ${user.name}!`));
     }
   });
 
