@@ -32,29 +32,5 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <script src="socket.io/socket.io.js"></script>
-<script type="text/javascript">
-  const socket = io();
-
-  document.querySelector('button').addEventListener('click', () => {
-    let value = document.querySelector('input').value;
-
-    socket.emit('createMessage', {
-      value
-    })
-
-    document.querySelector('input').value = ''
-  })
-
-  socket.on('connect', () => {
-    console.log('client connect');
-  })
-
-  socket.on('newMessage', (message) => {
-    let li = document.createElement('li')
-    li.innerHTML = `<b>${message.text}</b> <small> ${new Date(message.date)}</small>`
-
-    document.querySelector('ul').appendChild(li)
-  })
-</script>
 </body>
 </html>
