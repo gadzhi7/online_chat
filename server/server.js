@@ -20,21 +20,39 @@ io.on('connection', socket => {
   socket.on('join', (user, callback) => {
     if(!user.name || !user.room) {
       return callback('Enter valid user data');
-    } else {
-      callback({userId: socket.id});
-      socket.emit('message:new', message('Admin', `Welcome ${user.name}!`));
     }
+
+      callback({userId: socket.id});
+
+      socket.join(user.room);
+
+      // socket.id === user.id
+      users.remove(socket.id)
+      users.add(socket.id, user.name, user.room)
+
+      socket.emit('message:new', message('Admin', `Welcome ${user.name}!`));
+      socket.broadcast.to(user.room).emit('message:new', message('Admin', `${user.name} joined`))
   });
 
   socket.on('message:create', (data, callback) => {
     if (!message) {
        callback('message can\'t be emty');
     } else {
-      io.emit('message:new', message(data.name, data.text, data.id))
+      const user = users.get(data.id)
+      if (user) {
+        io.to(user.room).emit('message:new', message(data.name, data.text, data.id))
+      }
       callback();
     }
 
 
+  })
+
+  socket.on('disconnect', () => {
+    const user = users.remove(socket.id)
+    if (user) {
+      io.to(user.room).emit('message:new', message('Admin', `${user.name} left!`))
+    }
   })
 })
 
