@@ -64,7 +64,17 @@ new Vue({
 
       socket.on('message:new', message => {
         this.messages.push(message);
+
+        scrollToBottom (this.$refs.messages);
       })
+
+      scrollToBottom (this.$refs.messages);
     }
   }
 })
+
+function scrollToBottom (el) {
+  setTimeout(()=> {
+    el.scrollTop = el.scrollHeight;
+  })
+};
