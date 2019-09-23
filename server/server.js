@@ -27,36 +27,38 @@ io.on('connection', socket => {
       socket.join(user.room);
 
       // socket.id === user.id
-      users.remove(socket.id)
-      users.add(socket.id, user.name, user.room)
+      users.remove(socket.id);
+      users.add(socket.id, user.name, user.room);
+
+      io.to(user.room).emit('users:update', users.getByRoom(user.room));
 
       socket.emit('message:new', message('Admin', `Welcome ${user.name}!`));
-      socket.broadcast.to(user.room).emit('message:new', message('Admin', `${user.name} joined`))
+      socket.broadcast.to(user.room).emit('message:new', message('Admin', `${user.name} joined`));
   });
 
   socket.on('message:create', (data, callback) => {
     if (!message) {
        callback('message can\'t be emty');
     } else {
-      const user = users.get(data.id)
+      const user = users.get(data.id);
       if (user) {
-        io.to(user.room).emit('message:new', message(data.name, data.text, data.id))
+        io.to(user.room).emit('message:new', message(data.name, data.text, data.id));
       }
       callback();
     }
-
-
   })
 
+
   socket.on('disconnect', () => {
-    const user = users.remove(socket.id)
+    const user = users.remove(socket.id);
+
     if (user) {
-      io.to(user.room).emit('message:new', message('Admin', `${user.name} left!`))
+      io.to(user.room).emit('message:new', message('Admin', `${user.name} left!`));
+      io.to(user.room).emit('users:update', users.getByRoom(user.room));
     }
   })
 })
 
 server.listen(port, () => {
-
-  console.log(` server has been started on port ${port}`)
+  console.log(` server has been started on port ${port}`);
 })

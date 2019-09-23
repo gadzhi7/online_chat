@@ -13,7 +13,7 @@
   <div id="app">
     <div class="chat">
       <div class="chat-users collection">
-        <a href="" class="collection-item"></a>
+        <a v-for="(u, index) in users" :class="['collection-item', {'active': u.id === user.id}]">{{u.name}}</a>
       </div>
       <div class="chat-messages">
         <chat-message
